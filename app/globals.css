@@ -1,0 +1,340 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #0B0F19;
+  --foreground: #E0E7FF;
+  --card: #0F172A;
+  --card-foreground: #E0E7FF;
+  --popover: #0F172A;
+  --popover-foreground: #E0E7FF;
+  --primary: #6366F1;
+  --primary-foreground: #0B0F19;
+  --secondary: #7C3AED;
+  --secondary-foreground: #E0E7FF;
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
+  --accent: #22D3EE;
+  --accent-foreground: #0B0F19;
+  --destructive: #EF4444;
+  --destructive-foreground: #FCA5A5;
+  --border: #1E293B;
+  --input: #1E293B;
+  --ring: #6366F1;
+  --chart-1: #6366F1;
+  --chart-2: #7C3AED;
+  --chart-3: #22D3EE;
+  --chart-4: #EC4899;
+  --chart-5: #F97316;
+  --radius: 0.625rem;
+  --sidebar: #0F172A;
+  --sidebar-foreground: #E0E7FF;
+  --sidebar-primary: #6366F1;
+  --sidebar-primary-foreground: #0B0F19;
+  --sidebar-accent: #22D3EE;
+  --sidebar-accent-foreground: #0B0F19;
+  --sidebar-border: #1E293B;
+  --sidebar-ring: #6366F1;
+  /* AI Theme glow colors */
+  --glow-primary: rgba(99, 102, 241, 0.5);
+  --glow-accent: rgba(34, 211, 238, 0.5);
+}
+
+.dark {
+  --background: #0B0F19;
+  --foreground: #E0E7FF;
+  --card: #0F172A;
+  --card-foreground: #E0E7FF;
+  --popover: #0F172A;
+  --popover-foreground: #E0E7FF;
+  --primary: #6366F1;
+  --primary-foreground: #0B0F19;
+  --secondary: #7C3AED;
+  --secondary-foreground: #E0E7FF;
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
+  --accent: #22D3EE;
+  --accent-foreground: #0B0F19;
+  --destructive: #EF4444;
+  --destructive-foreground: #FCA5A5;
+  --border: #1E293B;
+  --input: #1E293B;
+  --ring: #6366F1;
+  --chart-1: #6366F1;
+  --chart-2: #7C3AED;
+  --chart-3: #22D3EE;
+  --chart-4: #EC4899;
+  --chart-5: #F97316;
+  --sidebar: #0F172A;
+  --sidebar-foreground: #E0E7FF;
+  --sidebar-primary: #6366F1;
+  --sidebar-primary-foreground: #0B0F19;
+  --sidebar-accent: #22D3EE;
+  --sidebar-accent-foreground: #0B0F19;
+  --sidebar-border: #1E293B;
+  --sidebar-ring: #6366F1;
+  /* AI Theme glow colors */
+  --glow-primary: rgba(99, 102, 241, 0.5);
+  --glow-accent: rgba(34, 211, 238, 0.5);
+}
+
+@theme inline {
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Animated background with neural network pattern */
+@layer utilities {
+  .bg-gradient-animated {
+    background: linear-gradient(135deg, #0B0F19 0%, #0F172A 50%, #0B0F19 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Glassmorphism effect */
+  .glass-effect {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+  }
+
+  /* Glow border effect */
+  .glow-border-primary {
+    border: 2px solid #6366F1;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3), inset 0 0 20px rgba(99, 102, 241, 0.1);
+  }
+
+  .glow-border-accent {
+    border: 2px solid #22D3EE;
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.3), inset 0 0 20px rgba(34, 211, 238, 0.1);
+  }
+
+  /* Hover glow effect - premium card hover */
+  .hover-glow {
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.4), 0 0 60px rgba(34, 211, 238, 0.2), 0 20px 40px rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.3) !important;
+  }
+
+  /* Icon hover lift */
+  .hover-icon {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .hover-icon:hover {
+    transform: translateY(-4px) scale(1.08);
+  }
+
+  /* Link hover effect */
+  .hover-link {
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .hover-link:hover {
+    color: #22D3EE;
+    text-shadow: 0 0 8px rgba(34, 211, 238, 0.4);
+  }
+
+  /* Button hover premium effect */
+  .hover-button {
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .hover-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+  }
+
+  /* Testimonial card hover */
+  .testimonial-hover {
+    transition: all 0.4s ease;
+  }
+
+  .testimonial-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 0 40px rgba(99, 102, 241, 0.3), 0 0 80px rgba(34, 211, 238, 0.1);
+    border-color: rgba(99, 102, 241, 0.2);
+  }
+
+  /* Soft glow text */
+  .text-glow {
+    text-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+  }
+
+  /* Neural network particles background */
+  .neural-bg {
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(124, 58, 237, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 40% 20%, rgba(34, 211, 238, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Subtle animation for cards */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .float-animation {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* Smooth fade in */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  /* Responsive scroll animations */
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .slide-in-up {
+    animation: slideInUp 0.6s ease-out forwards;
+  }
+
+  /* Smooth pulse effect for glowing elements */
+  @keyframes glow-pulse {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
+    }
+  }
+
+  .glow-pulse {
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+
+  /* Smooth fade for carousel items */
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* Smooth text animations */
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  .shimmer-text {
+    background: linear-gradient(
+      90deg,
+      rgba(99, 102, 241, 0.2),
+      rgba(99, 102, 241, 0.5),
+      rgba(99, 102, 241, 0.2)
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 3s infinite;
+  }
+
+  /* Parallax-friendly smooth transitions */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* Ensure smooth animations on all devices */
+  * {
+    @apply transition-transform transition-opacity;
+  }
+}
