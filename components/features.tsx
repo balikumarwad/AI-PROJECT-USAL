@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
+import { motion, useSpring, useMotionValue, useTransform } from 'framer-motion';
 import { MessageCircle, Mic, BarChart2, GraduationCap, FileText, Target } from 'lucide-react';
 
 // ─────────────────────────────────────────────────────────────
@@ -19,7 +19,7 @@ const features = [
     bullets: ['Available 24/7, no appointments', 'Personalized to your profile', 'Covers SOPs, visas & emails'],
     gradFrom: '#4F46E5',
     gradTo: '#8B5CF6',
-    bgCard: '#0A0A14', // Solid dark backgrounds for full screen
+    bgCard: '#0A0A14',
     accentColor: '#6366f1',
   },
   {
@@ -81,7 +81,7 @@ const features = [
 ];
 
 // ─────────────────────────────────────────────────────────────
-// MOCKUP VISUALS 
+// MOCKUP VISUALS
 // ─────────────────────────────────────────────────────────────
 function MockupCounselor() {
   return (
@@ -273,11 +273,46 @@ const mockupMap: Record<number, React.FC> = {
 };
 
 // ─────────────────────────────────────────────────────────────
+// HERO SCREEN (THE STICKY BASE LAYER)
+// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// HERO SCREEN (THE STICKY BASE LAYER)
+// ─────────────────────────────────────────────────────────────
+function HeroScreen() {
+  return (
+    <div 
+      className="sticky top-0 h-screen w-full flex flex-col items-center justify-center px-6 overflow-hidden bg-[#030305]"
+      style={{ zIndex: 0 }}
+    >
+      {/* Center Glow to break up the solid black */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="relative z-10">
+        <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight text-center">
+          Everything You Need to{' '}
+          <span className="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(99,102,241,0.3)]">
+            Study Abroad
+          </span>
+        </h2>
+        <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto text-center leading-relaxed border-t border-white/10 pt-6 mt-6">
+          Five powerful AI tools — each designed to take you one step closer to your dream university.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
 // MAIN EXPORT
 // ─────────────────────────────────────────────────────────────
 export function Features() {
   return (
-    <div id="features" className="relative bg-[#030305] overflow-hidden flex flex-col">
+    // The relative wrapper holds all sticky children together
+    <div id="features" className="relative w-full bg-[#030305]">
+      {/* 1. The base intro screen */}
+      <HeroScreen />
+      
+      {/* 2. The stacked feature cards */}
       {features.map((feature, index) => (
         <FullScreenFeature key={feature.id} feature={feature} index={index} />
       ))}
@@ -286,36 +321,33 @@ export function Features() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// FULL SCREEN FEATURE SECTION
+// FULL SCREEN FEATURE SECTION (STACKING CARDS)
 // ─────────────────────────────────────────────────────────────
 function FullScreenFeature({ feature, index }: { feature: typeof features[0]; index: number }) {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  // --- 1. VERTICAL SCROLL PARALLAX ---
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"] // Triggers as the section enters and leaves the viewport
-  });
-  
-  // Creates a floating effect for the mockup as the user scrolls down
-  const yParallax = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-
-  // --- 2. MOUSE TILT PARALLAX ---
+  // --- MOUSE TRACKING (For 3D Parallax Inside the Card) ---
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
   const smoothX = useSpring(mouseX, { damping: 25, stiffness: 200 });
   const smoothY = useSpring(mouseY, { damping: 25, stiffness: 200 });
 
-  // Exaggerated rotation for the 3D effect
   const rotateX = useTransform(smoothY, [-0.5, 0.5], ['12deg', '-12deg']);
   const rotateY = useTransform(smoothX, [-0.5, 0.5], ['-12deg', '12deg']);
+  
+  const translateX = useTransform(smoothX, [-0.5, 0.5], [-30, 30]);
+  const translateY = useTransform(smoothY, [-0.5, 0.5], [-30, 30]);
 
-  // Track mouse over the entire full-screen section
+  const bgTranslateX = useTransform(smoothX, [-0.5, 0.5], [60, -60]);
+  const bgTranslateY = useTransform(smoothY, [-0.5, 0.5], [60, -60]);
+
+  const innerTranslateX = useTransform(smoothX, [-0.5, 0.5], [-15, 15]);
+  const innerTranslateY = useTransform(smoothY, [-0.5, 0.5], [-15, 15]);
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!sectionRef.current) return;
-    const rect = sectionRef.current.getBoundingClientRect();
+    if (!contentRef.current) return;
+    const rect = contentRef.current.getBoundingClientRect();
     const xPct = (e.clientX - rect.left) / rect.width - 0.5;
     const yPct = (e.clientY - rect.top) / rect.height - 0.5;
     mouseX.set(xPct);
@@ -328,26 +360,35 @@ function FullScreenFeature({ feature, index }: { feature: typeof features[0]; in
   };
 
   const MockupComponent = mockupMap[feature.id as keyof typeof mockupMap];
-  const isEven = index % 2 === 1; 
 
   return (
-    <section
-      ref={sectionRef}
+    <div
+      ref={contentRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="w-full min-h-screen flex items-center justify-center relative overflow-hidden sticky top-0"
-      style={{ backgroundColor: feature.bgCard }}
+      // CRITICAL: We use 'sticky top-0 h-screen' directly without wrappers,
+      // and a shadow-top to emphasize the overlap effect.
+      className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden shadow-[0_-20px_50px_rgba(0,0,0,0.6)]"
+      style={{ 
+        backgroundColor: feature.bgCard,
+        // Increment z-index so each new card stacks on top of the previous one
+        zIndex: (index + 1) * 10 
+      }}
     >
-      {/* Background ambient glow matching the accent color */}
-      <div 
+      {/* Ambient background glow */}
+      <motion.div 
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vh] blur-[150px] rounded-full opacity-10 pointer-events-none"
-        style={{ backgroundColor: feature.accentColor }}
+        style={{ 
+          backgroundColor: feature.accentColor,
+          x: bgTranslateX,
+          y: bgTranslateY
+        }}
       />
 
       <div className="w-full max-w-7xl mx-auto px-6 py-24 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center z-10">
         
         {/* --- TEXT SIDE --- */}
-        <motion.div style={{ opacity }} className={`flex flex-col justify-center ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
+        <div className="flex flex-col justify-center">
           <div className="flex items-center gap-4 mb-6">
             <span
               className="text-sm font-black tracking-widest"
@@ -386,25 +427,21 @@ function FullScreenFeature({ feature, index }: { feature: typeof features[0]; in
               </li>
             ))}
           </ul>
-        </motion.div>
+        </div>
 
-        {/* --- VISUAL SIDE (With 3D Mouse Tilt & Scroll Parallax) --- */}
-        <div 
-          className={`relative perspective-[1500px] flex justify-center w-full ${isEven ? 'lg:order-1' : 'lg:order-2'}`}
-        >
-          {/* We apply the scroll translation (yParallax) and the mouse rotation (rotateX/Y) to the same motion div */}
+        {/* --- VISUAL SIDE (3D Mouse Parallax) --- */}
+        <div className="relative perspective-[1500px] flex justify-center w-full">
           <motion.div 
             style={{ 
-              y: yParallax,
+              x: translateX,
+              y: translateY,
               rotateX, 
               rotateY,
               transformStyle: 'preserve-3d'
             }} 
-            className="relative z-10 w-full max-w-[400px] p-6 rounded-[2rem] border border-white/10 shadow-2xl bg-[#0A0A1A]/80 backdrop-blur-xl"
+            className="w-full max-w-[400px] p-6 rounded-[2rem] border border-white/10 shadow-2xl bg-[#0A0A1A]/80 backdrop-blur-xl"
           >
-            {/* 3D Inner Pop - Translating Z pushes the UI towards the user during the tilt */}
-            <div style={{ transform: 'translateZ(60px)' }}>
-              {/* Top bar dots */}
+            <motion.div style={{ x: innerTranslateX, y: innerTranslateY, z: 60 }}>
               <div className="flex items-center gap-2 mb-4 pb-4 border-b border-white/5">
                 {['#EF4444', '#EAB308', '#22C55E'].map((c, i) => (
                   <div key={i} style={{ width: 10, height: 10, borderRadius: '50%', background: c }} />
@@ -412,11 +449,11 @@ function FullScreenFeature({ feature, index }: { feature: typeof features[0]; in
               </div>
               
               <MockupComponent />
-            </div>
+            </motion.div>
           </motion.div>
         </div>
 
       </div>
-    </section>
+    </div>
   );
 }
